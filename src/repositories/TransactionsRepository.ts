@@ -14,15 +14,26 @@ class TransactionsRepository {
   }
 
   public all(): Transaction[] {
-    // TODO
+    return this.transactions;
   }
 
   public getBalance(): Balance {
-    // TODO
+    const balacence  = this.transactions.reduce((previous,current) => {
+      if(current.type === 'income') {
+        previous.income += current.value
+      } else if(current.type === 'outcome') {
+        previous.outcome += current.value
+      }
+      previous.total = previous.income - previous.outcome
+      return previous
+    },{ income: 0, outcome: 0, total:0 })
+    return balacence
   }
 
-  public create(): Transaction {
-    // TODO
+  public create({ title, value, type } :Omit<Transaction,'id'>): Transaction {
+    const transaction = new Transaction({ title, value, type })
+    this.transactions.push(transaction);
+    return transaction;
   }
 }
 
